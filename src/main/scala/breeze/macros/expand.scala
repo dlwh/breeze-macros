@@ -9,7 +9,7 @@ import scala.annotation.{Annotation, StaticAnnotation}
  * It is pretty... alpha in that the functionality is basically there, but it is now in the least bit battle tested.
  * Don't ask much of it, and it will do fine, ask a lot, and well...
  *
- * Basically, expand takes a def with type arguments whose types are annotated with [[breeze.macros.expandArgs]]
+ * Basically, expand takes a def with type arguments whose types are annotated with [[breeze.macros.expand.args]]
  * and generates the cross product of all combinations. For example:
  *
  * {{{
@@ -25,7 +25,7 @@ import scala.annotation.{Annotation, StaticAnnotation}
  *   def foo_T_Double_U_Double(x: Double, y: Double) = x + y
  * }}}
  *
- * The real power comes from [[breeze.macros.sequence]], which annotates an argument to the method
+ * The real power comes from [[breeze.macros.expand.sequence]], which annotates an argument to the method
  * to correlate with a type (the first argument to sequence) and then a sequence of trees which are inlined
  * in place of references to the argument. For example:
  *
