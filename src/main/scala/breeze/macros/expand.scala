@@ -79,7 +79,7 @@ object expand {
         val exclusions = getExclusions(c)(mods, targs.map(_.name))
         val shouldValify = checkValify(c)(mods)
 
-        val typesToUnrollAs = typesToExpand.map{ td =>
+        val typesToUnrollAs: Map[c.Name, List[c.Type]] = typesToExpand.map{ td =>
           (td.name:Name) -> typeMappings(c)(td)
         }.toMap
 
@@ -119,6 +119,7 @@ object expand {
     }.mkString("_")
   }
 
+  // valExpansions is a [value identifier -> (
   def substitute(c: Context)(typeMap: Map[c.Name, c.Type], valExpansions: Map[c.Name, (c.Name, Map[c.Type, c.Tree])], rhs: c.mirror.universe.Tree): c.mirror.universe.Tree = {
     import c.mirror.universe._
 
@@ -129,10 +130,14 @@ object expand {
       }
     }
 
+    val termTypeMap = typeMap.map { case (name, tpe) => (name.toTermName:c.Name) -> Ident(tpe.typeSymbol.name.toTermName)}
+
     new Transformer() {
       override def transform(tree: Tree): Tree = tree match {
         case Ident(x) if typeMap.contains(x) =>
           TypeTree(typeMap(x))
+        case Ident(x) if termTypeMap.contains(x) =>
+          termTypeMap(x)
         case Apply(aa@Ident(x), args) if valExpansions.contains(x) =>
           val (tname, tmap) = valExpansions(x)
           val mappedTree = tmap(typeMap(tname))
