@@ -1,7 +1,6 @@
 package breeze.macros
 
 import org.scalatest.FunSuite
-import breeze.macros.arityize.relative
 
 /**
  * TODO
@@ -33,14 +32,30 @@ class arityizeTest extends FunSuite {
       def invoke(args: Any*)(a2: Any*) = ""
     }
 
-    @arityize(5)
+    @arityize(10)
     class CuKernel[@arityize.replicate T](fn: Any, blockDims: Array[Int]) {
-      def apply(workSize1: Int = 1)(@arityize.replicate t:  T @arityize.relative(t)):Unit = {
-        Whatever.invoke(Array(workSize1), blockDims, fn)((t: @arityize.replicate))
+      def apply(workSize1: Int = 1, workSize2: Int = 1, workSize3: Int = 1)(@arityize.replicate t: T @arityize.relative(t)):Unit = {
+        Whatever.invoke(Array(workSize1, workSize2, workSize3), blockDims, fn)((t: @arityize.replicate ))
       }
     }
 
+
+
     new CuKernel2[Int, String](1, Array()).apply()(1, "2")
+  }
+
+  test("Snap example 2") {
+    @arityize(2)
+    class CuKernel[@arityize.replicate T](fn: Any, blockDims: Array[Int]) {
+      def apply(workSize1: Int = 1)(@arityize.replicate t:  T @arityize.relative(t)):Unit = {
+        ???
+      }
+    }
+
+    @arityize(2)
+    def getKernel[@arityize.replicate T](name: String, blockDims: Array[Int] = Array(32, 1, 1)): (CuKernel[T @arityize.replicate ] @arityize.relative(getKernel)) = {
+      new (CuKernel[T @arityize.replicate ] @arityize.relative(getKernel))(name, blockDims)
+    }
   }
 
   test("Breeze LiteralRow") {

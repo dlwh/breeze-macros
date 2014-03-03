@@ -125,6 +125,8 @@ object arityize {
 
         val newTargs = targs.flatMap(arg => expandArity(c, order, bindings)(arg))
         Seq(AppliedTypeTree(newLHS, newTargs))
+      case New(tree) =>
+        Seq(New(expandArity(c, order, bindings)(tree).head))
       case _ =>
 //        println("???" + tree + " " + tree.getClass)
         Seq(tree)
