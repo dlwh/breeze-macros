@@ -15,6 +15,7 @@ class arityize(val count: Int) extends Annotation with StaticAnnotation {
 
 object arityize {
   class replicate extends Annotation with StaticAnnotation
+  class repeat extends Annotation with StaticAnnotation
   class relative(to: Any) extends Annotation with StaticAnnotation
 
   def arityizeImpl(c: Context)(annottees: c.Expr[Any]*):c.Expr[Any] = {
