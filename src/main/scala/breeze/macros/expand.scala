@@ -169,7 +169,7 @@ object expand {
           context.error(x.pos, s"@sequence arguments list does not match the expand.args for $nme2")
         }
         val predef = context.mirror.staticModule("scala.Predef").asModule
-        val missing = Select(Ident(predef), predef.newTermSymbol(newTermName("???")))
+        val missing = Select(Ident(predef), newTermName("???"))
         nme2 -> (typeMappings(nme2) zip args.flatten).toMap.withDefaultValue(missing)
     }
     x.get
