@@ -6,6 +6,8 @@ organization := "org.scalanlp"
 
 scalaVersion := "2.10.3"
 
+crossScalaVersions := Seq("2.11.0-RC1")
+
 resolvers ++= Seq(
   "ScalaNLP Maven2" at "http://repo.scalanlp.org/repo",
   "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/",
@@ -18,17 +20,16 @@ libraryDependencies ++= Seq(
 
 libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
   sv match {
-    case "2.9.2" =>
-      (deps :+ ("org.scalatest" % "scalatest" % "1.4.RC2" % "test"))
-    case x if x.startsWith("2.8") =>
-      (deps :+ ("org.scalatest" % "scalatest" % "1.3" % "test")
-            :+ ("org.scala-tools.testing" % "scalacheck_2.8.1" % "1.8" % "test"))
-    case _       =>
-     (deps :+ ("org.scalacheck" %% "scalacheck" % "1.10.0" % "test")
-           :+ ("org.scalatest" %% "scalatest" % "2.0.M5b" % "test"))
+    case x if x.startsWith("2.10") =>
+      deps :+ ("org.scalamacros" % "quasiquotes" % "2.0.0-M3" cross CrossVersion.full)
+    case _ => deps
   }
 }
 
+libraryDependencies ++= Seq(
+  "org.scalacheck" %% "scalacheck" % "1.11.3" % "test",
+  "org.scalatest"  %% "scalatest"  % "2.1.0"  % "test"
+)
 
 libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _)
 
@@ -40,7 +41,7 @@ scalacOptions ++= Seq("-deprecation", "-language:_", "-optimize")
 javaOptions += "-Xmx2g"
 
 
-addCompilerPlugin("org.scala-lang.plugins" % "macro-paradise" % "2.0.0-SNAPSHOT" cross CrossVersion.full)
+addCompilerPlugin("org.scalamacros" % "paradise" % "2.0.0-M3" cross CrossVersion.full)
 
 pomExtra := (
     <url>http://scalanlp.org/</url>
