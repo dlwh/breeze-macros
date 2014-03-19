@@ -1,6 +1,6 @@
 name := "breeze-macros"
 
-version := "0.3-SNAPSHOT"
+version := "0.3"
 
 organization := "org.scalanlp"
 
