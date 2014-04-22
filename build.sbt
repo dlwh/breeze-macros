@@ -4,14 +4,15 @@ version := "0.3-SNAPSHOT"
 
 organization := "org.scalanlp"
 
-scalaVersion := "2.10.3"
+scalaVersion := "2.11.0"
 
-crossScalaVersions := Seq("2.11.0-RC1")
+crossScalaVersions  := Seq("2.11.0", "2.10.3")
 
 resolvers ++= Seq(
   "ScalaNLP Maven2" at "http://repo.scalanlp.org/repo",
   "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots/",
-  "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/"
+  "Sonatype Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots/",
+  Resolver.sonatypeRepo("releases")
 )
 
 libraryDependencies ++= Seq(
@@ -28,7 +29,7 @@ libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
 
 libraryDependencies ++= Seq(
   "org.scalacheck" %% "scalacheck" % "1.11.3" % "test",
-  "org.scalatest"  %% "scalatest"  % "2.1.0"  % "test"
+  "org.scalatest"  %% "scalatest"  % "2.1.3"  % "test"
 )
 
 libraryDependencies <+= (scalaVersion)("org.scala-lang" % "scala-reflect" % _)
@@ -41,7 +42,7 @@ scalacOptions ++= Seq("-deprecation", "-language:_", "-optimize")
 javaOptions += "-Xmx2g"
 
 
-addCompilerPlugin("org.scalamacros" % "paradise" % "2.0.0-M3" cross CrossVersion.full)
+addCompilerPlugin("org.scalamacros" %% "paradise" % "2.0.0-M8" cross CrossVersion.full)
 
 pomExtra := (
     <url>http://scalanlp.org/</url>
@@ -73,9 +74,8 @@ publishMavenStyle := true
 
   publishTo <<= version { (v: String) =>
     val nexus = "https://oss.sonatype.org/"
-    if (v.trim.endsWith("SNAPSHOT")) 
-      Some("snapshots" at nexus + "content/repositories/snapshots") 
+    if (v.trim.endsWith("SNAPSHOT"))
+      Some("snapshots" at nexus + "content/repositories/snapshots")
     else
       Some("releases"  at nexus + "service/local/staging/deploy/maven2")
   }
-
