@@ -1,6 +1,6 @@
 name := "breeze-macros"
 
-version := "0.3"
+version := "0.3.1"
 
 organization := "org.scalanlp"
 
@@ -22,10 +22,13 @@ libraryDependencies ++= Seq(
 libraryDependencies <<= (scalaVersion, libraryDependencies) { (sv, deps) =>
   sv match {
     case x if x.startsWith("2.10") =>
-      deps :+ ("org.scalamacros" % "quasiquotes" % "2.0.0-M3" cross CrossVersion.full)
+      deps :+ ("org.scalamacros" %% "quasiquotes" % "2.0.0-M8")
     case _ => deps
   }
 }
+
+
+
 
 libraryDependencies ++= Seq(
   "org.scalacheck" %% "scalacheck" % "1.11.3" % "test",
